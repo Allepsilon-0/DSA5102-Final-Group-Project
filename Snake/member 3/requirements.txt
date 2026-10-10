@@ -1,0 +1,8 @@
+numpy
+pandas
+matplotlib
+torch
+gymnasium
+pygame
+tensorboard
+ipython

@@ -1,0 +1,10 @@
+{
+  "seed": 2026,
+  "algorithm": "dqn",
+  "total_steps": 210000,
+  "episodes": 5763,
+  "best_validation_step": 210000,
+  "best_validation_score": 5.433333333333334,
+  "train_seconds": 494.5163215290004,
+  "best_checkpoint": "runs/member3-step-budget-v2/final/seed-2026/dqn/checkpoints/best.pt"
+}

@@ -1,0 +1,10 @@
+{
+  "python": "3.11.17 (main, Oct  6 2026, 02:02:21) [GCC 14.2.0]",
+  "platform": "Linux-6.18.40.1-microsoft-standard-WSL2-x86_64-with-glibc2.41",
+  "torch": "2.14.1+cpu",
+  "numpy": "2.4.6",
+  "pandas": "3.0.6",
+  "matplotlib": "3.11.2",
+  "gymnasium": "1.4.0",
+  "pygame": "2.6.1"
+}

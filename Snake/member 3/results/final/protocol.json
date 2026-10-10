@@ -1,0 +1,23 @@
+{
+  "protocol_mode": "final",
+  "execution_mode": "final",
+  "grid_size": 8,
+  "end_score": 8,
+  "max_steps_per_episode": 300,
+  "training_seeds": [
+    7,
+    42,
+    2026,
+    31415,
+    27182
+  ],
+  "total_environment_steps": 210000,
+  "validation_interval": 20000,
+  "validation_episodes": 30,
+  "test_episodes": 200,
+  "validation_seed_base": 500000,
+  "test_seed_base": 900000,
+  "gamma": 0.99,
+  "epsilon_decay_steps": 60000,
+  "device": "cpu"
+}

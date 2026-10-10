@@ -1,0 +1,11 @@
+seed,algorithm,total_steps,episodes,best_validation_step,best_validation_score,train_seconds,best_checkpoint
+7,dqn,210000,5250,200000,5.533333333333333,484.11317886999996,runs/member3-step-budget-v2/final/seed-7/dqn/checkpoints/best.pt
+7,double_dqn,210000,5669,200000,5.566666666666666,544.2181000970002,runs/member3-step-budget-v2/final/seed-7/double-dqn/checkpoints/best.pt
+42,dqn,210000,5996,210000,5.833333333333333,481.622278932,runs/member3-step-budget-v2/final/seed-42/dqn/checkpoints/best.pt
+42,double_dqn,210000,6144,210000,5.933333333333334,533.4672041379999,runs/member3-step-budget-v2/final/seed-42/double-dqn/checkpoints/best.pt
+2026,dqn,210000,5763,210000,5.433333333333334,494.5163215290004,runs/member3-step-budget-v2/final/seed-2026/dqn/checkpoints/best.pt
+2026,double_dqn,210000,6217,210000,6.066666666666666,603.0620491890004,runs/member3-step-budget-v2/final/seed-2026/double-dqn/checkpoints/best.pt
+31415,dqn,210000,4950,200000,5.466666666666667,535.7562341150001,runs/member3-step-budget-v2/final/seed-31415/dqn/checkpoints/best.pt
+31415,double_dqn,210000,5747,200000,5.933333333333334,544.2768051050007,runs/member3-step-budget-v2/final/seed-31415/double-dqn/checkpoints/best.pt
+27182,dqn,210000,5278,200000,5.6,497.8552113980004,runs/member3-step-budget-v2/final/seed-27182/dqn/checkpoints/best.pt
+27182,double_dqn,210000,5897,200000,5.733333333333333,550.0680599019997,runs/member3-step-budget-v2/final/seed-27182/double-dqn/checkpoints/best.pt
