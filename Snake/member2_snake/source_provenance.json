@@ -1,0 +1,11 @@
+{
+  "repository": "https://github.com/Allepsilon-0/DSA5102-Final-Group-Project",
+  "source_folder": "Snake",
+  "user_files_recovered_from_github_html": ["model.py", "main.py", "play.py", "gen_notebook.py", "DSA5102_final_project_snake.ipynb"],
+  "recovered_sources_match_repository_snapshot": true,
+  "unchanged_support_files": ["environment.py", "dqn.py", "ppo.py"],
+  "member2_implemented_files": ["model.py", "main.py", "play.py", "gen_notebook.py", "member2_experiment.py", "test_member2.py"],
+  "reference_notebook": "reference/DSA5102_final_project_snake_original.ipynb",
+  "experiment_source_hashes": "runs/member2/final/protocol.json",
+  "ai_assistance_disclosed_in_report": true
+}

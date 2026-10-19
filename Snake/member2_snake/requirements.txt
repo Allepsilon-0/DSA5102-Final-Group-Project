@@ -1,0 +1,11 @@
+# Core runtime; requirements-lock.txt records the exact experiment environment.
+torch>=2.2
+numpy>=1.26
+pandas>=2.1
+matplotlib>=3.8
+gymnasium>=0.29
+pygame>=2.5
+pillow>=10
+nbformat>=5.9
+nbclient>=0.9
+ipykernel>=6.29

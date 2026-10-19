@@ -1,0 +1,86 @@
+{
+  "notebooks": {
+    "DSA5102_snake_member2.ipynb": {
+      "code_cells": 10,
+      "executed_cells": 10,
+      "errors": 0,
+      "seconds": 4.663241250000283
+    },
+    "DSA5102_final_project_snake_member2_completed.ipynb": {
+      "code_cells": 27,
+      "executed_cells": 27,
+      "errors": 0,
+      "seconds": 23.6109321670001
+    }
+  },
+  "focused_tests": "4 passed; see test_member2.py",
+  "completed_models": 10,
+  "autonomous_steps_total": 500000,
+  "test_episodes_per_model": 200,
+  "all_test_stages_and_csv_means_checked": true,
+  "source_hashes_checked": true,
+  "non_member2_notebook_sources_preserved": true,
+  "original_group_loader_compatible": true,
+  "runs": [
+    {
+      "seed": 42,
+      "arm": "ac",
+      "rl_steps": 50000,
+      "test_episodes_per_stage": 200
+    },
+    {
+      "seed": 42,
+      "arm": "bc_ac",
+      "rl_steps": 50000,
+      "test_episodes_per_stage": 200
+    },
+    {
+      "seed": 7,
+      "arm": "ac",
+      "rl_steps": 50000,
+      "test_episodes_per_stage": 200
+    },
+    {
+      "seed": 7,
+      "arm": "bc_ac",
+      "rl_steps": 50000,
+      "test_episodes_per_stage": 200
+    },
+    {
+      "seed": 31415,
+      "arm": "ac",
+      "rl_steps": 50000,
+      "test_episodes_per_stage": 200
+    },
+    {
+      "seed": 31415,
+      "arm": "bc_ac",
+      "rl_steps": 50000,
+      "test_episodes_per_stage": 200
+    },
+    {
+      "seed": 2026,
+      "arm": "ac",
+      "rl_steps": 50000,
+      "test_episodes_per_stage": 200
+    },
+    {
+      "seed": 2026,
+      "arm": "bc_ac",
+      "rl_steps": 50000,
+      "test_episodes_per_stage": 200
+    },
+    {
+      "seed": 27182,
+      "arm": "ac",
+      "rl_steps": 50000,
+      "test_episodes_per_stage": 200
+    },
+    {
+      "seed": 27182,
+      "arm": "bc_ac",
+      "rl_steps": 50000,
+      "test_episodes_per_stage": 200
+    }
+  ]
+}
