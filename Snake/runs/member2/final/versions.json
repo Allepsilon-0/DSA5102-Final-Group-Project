@@ -1,0 +1,13 @@
+{
+  "python": "3.13.7",
+  "platform": "macOS-15.1-arm64-arm-64bit-Mach-O",
+  "packages": {
+    "torch": "2.14.1",
+    "numpy": "2.5.4",
+    "pandas": "3.0.6",
+    "matplotlib": "3.11.2",
+    "gymnasium": "1.4.0",
+    "pygame": "2.6.1",
+    "pillow": "13.0.0"
+  }
+}

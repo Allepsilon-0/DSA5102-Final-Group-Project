@@ -1,0 +1,175 @@
+{
+  "protocol": {
+    "seeds": [
+      7,
+      42,
+      2026,
+      31415,
+      27182
+    ],
+    "rl_steps": 50000,
+    "teacher_episodes": [
+      0,
+      100
+    ],
+    "imitation_updates": 4,
+    "grid_size": 8,
+    "end_score": 8,
+    "max_steps": 300,
+    "reward_mode": "sparse",
+    "validation_seed_base": 500000,
+    "eval_episodes": 30,
+    "eval_every_steps": 5000,
+    "test_seed_base": 900000,
+    "test_episodes": 200,
+    "progress_seed": 900000,
+    "learning_rate": 0.0001,
+    "weight_decay": 1e-05,
+    "gamma": 0.99,
+    "entropy_coef": 0.01,
+    "device": "cpu",
+    "torch_threads": 1,
+    "source_sha256": {
+      "environment.py": "e474d7c0dbd839bc1269de798830b01d3f71526c618611852c6058741a7b7c3a",
+      "model.py": "370d623da716d30adfe98597544d300d23221f7ab9911698f56f252f767c5f36",
+      "main.py": "32bb613b90fcd06c7147019671fac7980a17cbc1d778e7a983d00b86565e620a"
+    },
+    "mode": "final"
+  },
+  "aggregate": {
+    "ac": {
+      "score": {
+        "mean": 0.127,
+        "std": 0.03866522985836241
+      },
+      "reward": {
+        "mean": -3.8277199999999993,
+        "std": 0.349610180415273
+      },
+      "success_rate": {
+        "mean": 0.0,
+        "std": 0.0
+      },
+      "death_rate": {
+        "mean": 1.0,
+        "std": 0.0
+      },
+      "truncation_rate": {
+        "mean": 0.0,
+        "std": 0.0
+      },
+      "steps": {
+        "mean": 8.599,
+        "std": 1.7948412186040301
+      }
+    },
+    "bc_ac": {
+      "score": {
+        "mean": 1.668,
+        "std": 0.20305787352378143
+      },
+      "reward": {
+        "mean": -2.5958300000000594,
+        "std": 7.77683541114252
+      },
+      "success_rate": {
+        "mean": 0.006999999999999999,
+        "std": 0.008366600265340756
+      },
+      "death_rate": {
+        "mean": 0.6369999999999999,
+        "std": 0.10213961033800745
+      },
+      "truncation_rate": {
+        "mean": 0.356,
+        "std": 0.09423375191511797
+      },
+      "steps": {
+        "mean": 117.53799999999998,
+        "std": 26.726466891454244
+      }
+    }
+  },
+  "paired": {
+    "score": {
+      "mean_difference": 1.541,
+      "bootstrap_95": [
+        1.371,
+        1.705
+      ],
+      "differences": [
+        1.775,
+        1.3649999999999998,
+        1.615,
+        1.27,
+        1.6800000000000002
+      ]
+    },
+    "success_rate": {
+      "mean_difference": 0.006999999999999999,
+      "bootstrap_95": [
+        0.001,
+        0.014000000000000002
+      ],
+      "differences": [
+        0.02,
+        0.0,
+        0.01,
+        0.005,
+        0.0
+      ]
+    },
+    "reward": {
+      "mean_difference": 1.23188999999994,
+      "bootstrap_95": [
+        -5.0718000000000725,
+        7.264739999999949
+      ],
+      "differences": [
+        3.0847999999999134,
+        -9.070400000000081,
+        6.326599999999935,
+        -4.474400000000051,
+        10.292849999999984
+      ]
+    }
+  },
+  "gameplay": {
+    "Initial": {
+      "seed": 900000,
+      "grid_size": 8,
+      "score": 0,
+      "steps": 300,
+      "reward": -150.50000000000014,
+      "success": false,
+      "outcome": "time limit"
+    },
+    "After BC": {
+      "seed": 900000,
+      "grid_size": 8,
+      "score": 1,
+      "steps": 9,
+      "reward": 4.9300000000000015,
+      "success": false,
+      "outcome": "collision"
+    },
+    "AC midpoint": {
+      "seed": 900000,
+      "grid_size": 8,
+      "score": 1,
+      "steps": 11,
+      "reward": 4.910000000000002,
+      "success": false,
+      "outcome": "collision"
+    },
+    "Best validation": {
+      "seed": 900000,
+      "grid_size": 8,
+      "score": 1,
+      "steps": 300,
+      "reward": -17.48999999999997,
+      "success": false,
+      "outcome": "time limit"
+    }
+  }
+}

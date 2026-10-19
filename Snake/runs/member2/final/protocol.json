@@ -1,0 +1,37 @@
+{
+  "seeds": [
+    7,
+    42,
+    2026,
+    31415,
+    27182
+  ],
+  "rl_steps": 50000,
+  "teacher_episodes": [
+    0,
+    100
+  ],
+  "imitation_updates": 4,
+  "grid_size": 8,
+  "end_score": 8,
+  "max_steps": 300,
+  "reward_mode": "sparse",
+  "validation_seed_base": 500000,
+  "eval_episodes": 30,
+  "eval_every_steps": 5000,
+  "test_seed_base": 900000,
+  "test_episodes": 200,
+  "progress_seed": 900000,
+  "learning_rate": 0.0001,
+  "weight_decay": 1e-05,
+  "gamma": 0.99,
+  "entropy_coef": 0.01,
+  "device": "cpu",
+  "torch_threads": 1,
+  "source_sha256": {
+    "environment.py": "e474d7c0dbd839bc1269de798830b01d3f71526c618611852c6058741a7b7c3a",
+    "model.py": "370d623da716d30adfe98597544d300d23221f7ab9911698f56f252f767c5f36",
+    "main.py": "32bb613b90fcd06c7147019671fac7980a17cbc1d778e7a983d00b86565e620a"
+  },
+  "mode": "final"
+}
