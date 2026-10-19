@@ -1,0 +1,18 @@
+{
+  "started_without_runs_folder": true,
+  "automatic_asset_extraction": true,
+  "notebooks": {
+    "DSA5102_snake_member2.ipynb": {
+      "code_cells": 10,
+      "executed_cells": 10,
+      "errors": 0,
+      "seconds": 6.130136541999491
+    },
+    "DSA5102_final_project_snake_member2_completed.ipynb": {
+      "code_cells": 27,
+      "executed_cells": 27,
+      "errors": 0,
+      "seconds": 23.68247670799974
+    }
+  }
+}
