@@ -64,16 +64,6 @@ python member5_unified_evaluation.py --mode smoke --project-dir "/path/to/Snake"
 
 A smoke test verifies the pipeline; it does not establish a final ranking. This package does not contain a full evaluation run or PPO results and is not the complete final project submission.
 
-## Uploading to GitHub
-
-Open the group's `Snake` directory on GitHub, select **Add file > Upload files**, and drag the extracted `member5` folder onto the upload page. Check that paths such as `member5/README.md` retain the folder prefix. Enter a descriptive commit message and complete the upload using the group's branch workflow.
-
-The intended repository path is `Snake/member5/`. GitHub stores the files but does not execute the benchmark. Members 2 and 3 retain authorship of their code and experiments. Later, integrate the selected evaluation outputs into the group's single final notebook.
-
-## Contributions and generative AI
-
-The shared environment, model implementations, teacher and existing checkpoints belong to their original group authors. OpenAI Codex assisted with extracting the evaluation program, preparing documentation and the Jupyter entry point, translating the package into English and executing verification checks. Member 5 should understand and verify this work before including it in the final report. The final group declaration should consolidate each member's actual AI usage.
-
 ## Included verified run
 
 The 60-episode smoke test is documented in the [included run report](results/smoke/20261023T145446_150083Z/report.md).
