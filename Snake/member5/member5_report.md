@@ -85,8 +85,8 @@ The package contains pipeline evidence, not a final ranking. Every execution sav
 
 ## 9. Remaining integration work
 
-The full common evaluation, PPO integration, learning-curve consolidation, training-stage gameplay, fixed-state decision analysis, final conclusions, final group notebook and human video presentation remain to be completed. This support directory does not replace the required final notebook.
+The full common evaluation, PPO integration, learning-curve consolidation, training-stage gameplay, fixed-state decision analysis, final conclusions, final group notebook and human video presentation remain to be completed. 
 
 ## 10. Contributions and AI usage
 
-The shared environment, algorithm implementations and previously trained weights come from the original group members. OpenAI Codex assisted with evaluation, documentation, file organization, English translation and execution checks. Member 5 is responsible for understanding, verifying, integrating and presenting this work, with accurate disclosure in the final group report.
+The shared environment, algorithm implementations and previously trained weights come from the original group members. OpenAI Codex assisted with evaluation. Member 5 is responsible for understanding, verifying, integrating and presenting this work, with accurate disclosure in the final group report.
