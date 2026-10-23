@@ -1,6 +1,6 @@
 # Member 5: Unified Evaluation and Integration
 
-This directory belongs beside `Snake/member 3/`. Extract the complete `member5` folder into the group's `Snake` directory. It reuses the shared environment and model code and reads the existing checkpoints delivered by Members 2 and 3.
+It reuses the shared environment and model code and reads the existing checkpoints delivered by Members 2 , 3 and 4.
 
 ## Files and directories
 
