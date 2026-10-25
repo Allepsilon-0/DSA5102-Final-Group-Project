@@ -1,0 +1,8 @@
+numpy
+torch
+gymnasium
+pygame-ce
+matplotlib
+pillow
+ipython
+nbformat
