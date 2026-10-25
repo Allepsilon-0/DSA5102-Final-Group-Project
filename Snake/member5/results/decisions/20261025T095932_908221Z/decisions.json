@@ -1,0 +1,594 @@
+{
+  "inspection_scope": {
+    "training_seed": 42,
+    "environment": {
+      "grid_size": 8,
+      "end_score": 8,
+      "max_steps": 300,
+      "reward_mode": "sparse",
+      "teacher_mode": "shortest_path"
+    },
+    "scenario_count": 4,
+    "model_count": 5,
+    "pending_methods": [],
+    "ppo_clip_ratio": 0.2,
+    "train_model": false,
+    "full_benchmark_run": false,
+    "policy": "argmax; no action masking or teacher override",
+    "limitation": "Hand-authored states from one training seed are qualitative probes, not a performance or significance test. Immediate safety covers only the next step."
+  },
+  "models": [
+    {
+      "method": "AC",
+      "training_seed": 42,
+      "checkpoint": "member2_snake/member2_github_upload 2/member2_assets.zip!runs/member2/final/seed-42/ac/checkpoints/best.pt",
+      "checkpoint_sha256": "4eb15c5e52f6183f21395fbba6fc0fa017c7faa96caa498ee592582719246447",
+      "checkpoint_config": {
+        "episodes": 500,
+        "teacher_episodes": 0,
+        "imitation_updates": 4,
+        "grid_size": 8,
+        "end_score": 8,
+        "max_steps": 300,
+        "rl_steps": 50000,
+        "eval_interval": 100,
+        "eval_every_steps": 5000,
+        "eval_episodes": 30,
+        "validation_seed_base": 500000,
+        "save_interval": 250,
+        "learning_rate": 0.0001,
+        "weight_decay": 1e-05,
+        "gamma": 0.99,
+        "entropy_coef": 0.01,
+        "seed": 42,
+        "device": "cpu",
+        "output_dir": "outputs/member2_snake/runs/member2/final/seed-42/ac",
+        "resume": null,
+        "tensorboard": false,
+        "reward_mode": "sparse",
+        "teacher_mode": "shortest_path",
+        "torch_threads": 1,
+        "progress_rl_steps": 20000,
+        "progress_demo_steps": 0
+      },
+      "training_budget_steps": 50000,
+      "selected_checkpoint_steps": 20000
+    },
+    {
+      "method": "BC + AC",
+      "training_seed": 42,
+      "checkpoint": "member2_snake/member2_github_upload 2/member2_assets.zip!runs/member2/final/seed-42/bc_ac/checkpoints/best.pt",
+      "checkpoint_sha256": "a86bfa8c6038e05d9287d1a8fe0f9429dbf35bf085c31a41447f60cf2085adb3",
+      "checkpoint_config": {
+        "episodes": 500,
+        "teacher_episodes": 100,
+        "imitation_updates": 4,
+        "grid_size": 8,
+        "end_score": 8,
+        "max_steps": 300,
+        "rl_steps": 50000,
+        "eval_interval": 100,
+        "eval_every_steps": 5000,
+        "eval_episodes": 30,
+        "validation_seed_base": 500000,
+        "save_interval": 250,
+        "learning_rate": 0.0001,
+        "weight_decay": 1e-05,
+        "gamma": 0.99,
+        "entropy_coef": 0.01,
+        "seed": 42,
+        "device": "cpu",
+        "output_dir": "outputs/member2_snake/runs/member2/final/seed-42/bc_ac",
+        "resume": null,
+        "tensorboard": false,
+        "reward_mode": "sparse",
+        "teacher_mode": "shortest_path",
+        "torch_threads": 1,
+        "progress_rl_steps": 35000,
+        "progress_demo_steps": 3896
+      },
+      "training_budget_steps": 50000,
+      "selected_checkpoint_steps": 35000
+    },
+    {
+      "method": "DQN",
+      "training_seed": 42,
+      "checkpoint": "member 3/results/final/seed-42/dqn/checkpoints/best.pt",
+      "checkpoint_sha256": "83e82101e1219aad8ffead45a41aba63968579069cbb5cc755c469e5daebac70",
+      "checkpoint_config": {
+        "grid_size": 8,
+        "end_score": 8,
+        "max_steps": 300,
+        "double_dqn": false,
+        "dueling": false,
+        "learning_rate": 0.0003,
+        "weight_decay": 0.0,
+        "gamma": 0.99,
+        "seed": 42,
+        "total_environment_steps": 210000,
+        "epsilon_decay_steps": 60000
+      },
+      "training_budget_steps": 210000,
+      "selected_checkpoint_steps": 210000
+    },
+    {
+      "method": "Double DQN",
+      "training_seed": 42,
+      "checkpoint": "member 3/results/final/seed-42/double-dqn/checkpoints/best.pt",
+      "checkpoint_sha256": "f904b708f54392d1e422fb7d018b2a602774e04e8dc69c90b9122e7e086bd874",
+      "checkpoint_config": {
+        "grid_size": 8,
+        "end_score": 8,
+        "max_steps": 300,
+        "double_dqn": true,
+        "dueling": false,
+        "learning_rate": 0.0003,
+        "weight_decay": 0.0,
+        "gamma": 0.99,
+        "seed": 42,
+        "total_environment_steps": 210000,
+        "epsilon_decay_steps": 60000
+      },
+      "training_budget_steps": 210000,
+      "selected_checkpoint_steps": 210000
+    },
+    {
+      "method": "PPO",
+      "training_seed": 42,
+      "checkpoint": "member4/results/final/seed-42/clip-0.2/checkpoints/best.pt",
+      "checkpoint_sha256": "55f69dfaae56a7efe6fc65b031a63b26d1fbc31b337fd113a11afdda8a932a5e",
+      "checkpoint_config": {
+        "mode": "final",
+        "seeds": [
+          7,
+          42,
+          2026,
+          31415,
+          27182
+        ],
+        "clips": [
+          0.1,
+          0.2,
+          0.3
+        ],
+        "steps": 500000,
+        "eval_interval": 25000,
+        "validation_episodes": 50,
+        "test_episodes": 200,
+        "validation_base": 2601000,
+        "test_base": 2950000,
+        "rollout_steps": 1024,
+        "gamma": 0.99,
+        "gae_lambda": 0.95,
+        "grid_size": 8,
+        "end_score": 8,
+        "max_steps": 300,
+        "reward_mode": "sparse",
+        "reward_scale": 0.1,
+        "learning_rate": 0.0003,
+        "update_epochs": 6,
+        "batch_size": 256,
+        "value_coef": 0.5,
+        "entropy_coef": 0.02,
+        "max_grad_norm": 0.5,
+        "evaluation_policy": "greedy",
+        "timeout_semantics": "finite-horizon terminal",
+        "source_sha256": {
+          "snake_ppo.py": "f8e06dd50240f202559797559aac94aa223dfd681e056e5b58d638e3e1996174"
+        },
+        "entropy_final": 0.005,
+        "development_only": false,
+        "initialization": "orthogonal; policy head gain 0.01",
+        "target_kl": 0.03,
+        "learning_rate_schedule": "linear 1.0 to 0.1",
+        "seed": 42,
+        "clip_ratio": 0.2
+      },
+      "training_budget_steps": 500000,
+      "selected_checkpoint_steps": 425000
+    }
+  ],
+  "source_sha256": {
+    "environment.py": "e474d7c0dbd839bc1269de798830b01d3f71526c618611852c6058741a7b7c3a",
+    "member2_snake/model.py": "370d623da716d30adfe98597544d300d23221f7ab9911698f56f252f767c5f36",
+    "dqn.py": "ed23fcb1752a519e3827d2eaf16017155c87ed2a6ec7dd09a3498f0dd28184eb",
+    "ppo.py": "e306ce0775ec782a43182bf325fbe54ce4cc7347c47f185d30d4fe239a5c97b2",
+    "member4/snake_ppo.py": "f8e06dd50240f202559797559aac94aa223dfd681e056e5b58d638e3e1996174"
+  },
+  "inspection_script_sha256": "66ad99f5ebfbd3f63d9b799c87fa81f511170cf645650e75a5a0ef24ed2f313b",
+  "versions": {
+    "python": "3.12.14 (main, Aug 25 2026, 14:00:49) [Clang 22.1.3 ]",
+    "torch": "2.9.1+cpu",
+    "numpy": "2.3.5"
+  },
+  "scenarios": [
+    {
+      "name": "food_ahead",
+      "title": "Food ahead",
+      "description": "Food is two cells ahead on an open board.",
+      "snake": [
+        [
+          4,
+          4
+        ]
+      ],
+      "food": [
+        4,
+        6
+      ],
+      "direction": [
+        0,
+        1
+      ],
+      "immediate_action_safety": {
+        "left": true,
+        "right": true,
+        "straight": true
+      },
+      "teacher_action": "straight",
+      "models": {
+        "AC": {
+          "score_type": "probability",
+          "state_value": -4.508021354675293,
+          "scores": [
+            0.4679969251155853,
+            0.44010111689567566,
+            0.0919019877910614
+          ],
+          "selected_action": 0,
+          "top_action_margin": 0.027895808219909668,
+          "selected_action_name": "left",
+          "selected_action_immediately_safe": true
+        },
+        "BC + AC": {
+          "score_type": "probability",
+          "state_value": -1.5766953229904175,
+          "scores": [
+            0.10098961740732193,
+            0.3760933578014374,
+            0.5229170322418213
+          ],
+          "selected_action": 2,
+          "top_action_margin": 0.1468236744403839,
+          "selected_action_name": "straight",
+          "selected_action_immediately_safe": true
+        },
+        "DQN": {
+          "score_type": "q_value",
+          "scores": [
+            71.70873260498047,
+            71.8205795288086,
+            72.75047302246094
+          ],
+          "selected_action": 2,
+          "top_action_margin": 0.9298934936523438,
+          "selected_action_name": "straight",
+          "selected_action_immediately_safe": true
+        },
+        "Double DQN": {
+          "score_type": "q_value",
+          "scores": [
+            68.98080444335938,
+            67.85255432128906,
+            69.91149139404297
+          ],
+          "selected_action": 2,
+          "top_action_margin": 0.9306869506835938,
+          "selected_action_name": "straight",
+          "selected_action_immediately_safe": true
+        },
+        "PPO": {
+          "score_type": "probability",
+          "state_value": 2.7406396865844727,
+          "scores": [
+            0.3709182143211365,
+            0.626979410648346,
+            0.0021024395246058702
+          ],
+          "selected_action": 1,
+          "top_action_margin": 0.2560611963272095,
+          "selected_action_name": "right",
+          "selected_action_immediately_safe": true
+        }
+      }
+    },
+    {
+      "name": "wall_ahead",
+      "title": "Wall ahead",
+      "description": "Straight immediately hits the right boundary.",
+      "snake": [
+        [
+          4,
+          7
+        ],
+        [
+          4,
+          6
+        ]
+      ],
+      "food": [
+        0,
+        0
+      ],
+      "direction": [
+        0,
+        1
+      ],
+      "immediate_action_safety": {
+        "left": true,
+        "right": true,
+        "straight": false
+      },
+      "teacher_action": "left",
+      "models": {
+        "AC": {
+          "score_type": "probability",
+          "state_value": -4.607192039489746,
+          "scores": [
+            0.46365922689437866,
+            0.45489710569381714,
+            0.08144371956586838
+          ],
+          "selected_action": 0,
+          "top_action_margin": 0.008762121200561523,
+          "selected_action_name": "left",
+          "selected_action_immediately_safe": true
+        },
+        "BC + AC": {
+          "score_type": "probability",
+          "state_value": -1.8563891649246216,
+          "scores": [
+            0.672168493270874,
+            0.27209848165512085,
+            0.05573303997516632
+          ],
+          "selected_action": 0,
+          "top_action_margin": 0.4000700116157532,
+          "selected_action_name": "left",
+          "selected_action_immediately_safe": true
+        },
+        "DQN": {
+          "score_type": "q_value",
+          "scores": [
+            60.693660736083984,
+            59.412086486816406,
+            36.71532440185547
+          ],
+          "selected_action": 0,
+          "top_action_margin": 1.2815742492675781,
+          "selected_action_name": "left",
+          "selected_action_immediately_safe": true
+        },
+        "Double DQN": {
+          "score_type": "q_value",
+          "scores": [
+            58.7286262512207,
+            58.16632843017578,
+            37.778507232666016
+          ],
+          "selected_action": 0,
+          "top_action_margin": 0.5622978210449219,
+          "selected_action_name": "left",
+          "selected_action_immediately_safe": true
+        },
+        "PPO": {
+          "score_type": "probability",
+          "state_value": 0.5079758167266846,
+          "scores": [
+            0.9990041851997375,
+            0.0005076250527054071,
+            0.0004881261265836656
+          ],
+          "selected_action": 0,
+          "top_action_margin": 0.9984965324401855,
+          "selected_action_name": "left",
+          "selected_action_immediately_safe": true
+        }
+      }
+    },
+    {
+      "name": "body_turn",
+      "title": "Bent body",
+      "description": "A bent body is visible behind the head.",
+      "snake": [
+        [
+          3,
+          3
+        ],
+        [
+          3,
+          2
+        ],
+        [
+          4,
+          2
+        ]
+      ],
+      "food": [
+        5,
+        3
+      ],
+      "direction": [
+        0,
+        1
+      ],
+      "immediate_action_safety": {
+        "left": true,
+        "right": true,
+        "straight": true
+      },
+      "teacher_action": "right",
+      "models": {
+        "AC": {
+          "score_type": "probability",
+          "state_value": -4.552377700805664,
+          "scores": [
+            0.443224161863327,
+            0.46857795119285583,
+            0.08819781988859177
+          ],
+          "selected_action": 1,
+          "top_action_margin": 0.02535378932952881,
+          "selected_action_name": "right",
+          "selected_action_immediately_safe": true
+        },
+        "BC + AC": {
+          "score_type": "probability",
+          "state_value": -1.6147524118423462,
+          "scores": [
+            0.012007295154035091,
+            0.9390712380409241,
+            0.04892140254378319
+          ],
+          "selected_action": 1,
+          "top_action_margin": 0.8901498317718506,
+          "selected_action_name": "right",
+          "selected_action_immediately_safe": true
+        },
+        "DQN": {
+          "score_type": "q_value",
+          "scores": [
+            60.962303161621094,
+            62.17474365234375,
+            61.01366424560547
+          ],
+          "selected_action": 1,
+          "top_action_margin": 1.1610794067382812,
+          "selected_action_name": "right",
+          "selected_action_immediately_safe": true
+        },
+        "Double DQN": {
+          "score_type": "q_value",
+          "scores": [
+            57.333927154541016,
+            60.46112060546875,
+            56.04956817626953
+          ],
+          "selected_action": 1,
+          "top_action_margin": 3.1271934509277344,
+          "selected_action_name": "right",
+          "selected_action_immediately_safe": true
+        },
+        "PPO": {
+          "score_type": "probability",
+          "state_value": 3.9851534366607666,
+          "scores": [
+            9.31840913835913e-05,
+            0.9998606443405151,
+            4.609459938365035e-05
+          ],
+          "selected_action": 1,
+          "top_action_margin": 0.9997674822807312,
+          "selected_action_name": "right",
+          "selected_action_immediately_safe": true
+        }
+      }
+    },
+    {
+      "name": "narrow_escape",
+      "title": "Body beside head",
+      "description": "Right immediately hits the body; left and straight avoid immediate collision.",
+      "snake": [
+        [
+          2,
+          2
+        ],
+        [
+          3,
+          2
+        ],
+        [
+          3,
+          3
+        ],
+        [
+          2,
+          3
+        ],
+        [
+          1,
+          3
+        ]
+      ],
+      "food": [
+        0,
+        7
+      ],
+      "direction": [
+        -1,
+        0
+      ],
+      "immediate_action_safety": {
+        "left": true,
+        "right": false,
+        "straight": true
+      },
+      "teacher_action": "straight",
+      "models": {
+        "AC": {
+          "score_type": "probability",
+          "state_value": -4.569369792938232,
+          "scores": [
+            0.49497121572494507,
+            0.40642842650413513,
+            0.09860030561685562
+          ],
+          "selected_action": 0,
+          "top_action_margin": 0.08854278922080994,
+          "selected_action_name": "left",
+          "selected_action_immediately_safe": true
+        },
+        "BC + AC": {
+          "score_type": "probability",
+          "state_value": -1.9569075107574463,
+          "scores": [
+            0.0007404432981275022,
+            0.995924711227417,
+            0.0033348037395626307
+          ],
+          "selected_action": 1,
+          "top_action_margin": 0.9925898909568787,
+          "selected_action_name": "right",
+          "selected_action_immediately_safe": false
+        },
+        "DQN": {
+          "score_type": "q_value",
+          "scores": [
+            43.531455993652344,
+            46.203678131103516,
+            45.04560089111328
+          ],
+          "selected_action": 1,
+          "top_action_margin": 1.1580772399902344,
+          "selected_action_name": "right",
+          "selected_action_immediately_safe": false
+        },
+        "Double DQN": {
+          "score_type": "q_value",
+          "scores": [
+            37.719295501708984,
+            43.742671966552734,
+            41.94111633300781
+          ],
+          "selected_action": 1,
+          "top_action_margin": 1.8015556335449219,
+          "selected_action_name": "right",
+          "selected_action_immediately_safe": false
+        },
+        "PPO": {
+          "score_type": "probability",
+          "state_value": 2.957706928253174,
+          "scores": [
+            1.331850126007339e-05,
+            0.9994184970855713,
+            0.0005681958864443004
+          ],
+          "selected_action": 1,
+          "top_action_margin": 0.9988502860069275,
+          "selected_action_name": "right",
+          "selected_action_immediately_safe": false
+        }
+      }
+    }
+  ]
+}

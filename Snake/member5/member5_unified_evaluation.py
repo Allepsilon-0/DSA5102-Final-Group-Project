@@ -8,7 +8,7 @@ from pathlib import Path
 
 
 def run_benchmark(*, project_dir=None, mode="smoke", output_root=None, show_plots=False):
-    """Evaluate six configurations and save a new timestamped results directory.
+    """Evaluate seven configurations and save a new timestamped results directory.
 
     project_dir: Snake folder or repository root; inferred from this file by default.
     mode: smoke = one training seed / 10 games, evaluation = five seeds / 200 games.
@@ -81,10 +81,29 @@ def run_benchmark(*, project_dir=None, mode="smoke", output_root=None, show_plot
         ac_source = SNAKE_DIR / "model.py"
     ac_module = load_source("member5_ac_model", ac_source)
     dqn_module = load_source("member5_dqn_model", SNAKE_DIR / "dqn.py")
+    ppo_source = SNAKE_DIR / "ppo.py"
+    ppo_module = load_source("member5_ppo_model", ppo_source)
 
     SnakeEnv = env_module.SnakeEnv
     ConvActorCritic = ac_module.ConvActorCritic
     QNetwork = dqn_module.QNetwork
+    PPOActorCritic = ppo_module.PPOActorCritic
+
+    # The delivered PPO embeds the shared environment. Compare executable syntax,
+    # ignoring comments and docstrings, before using the common environment.
+    import ast
+    def environment_tree(path):
+        tree = next(n for n in ast.parse(path.read_text(encoding="utf-8")).body
+                    if isinstance(n, ast.ClassDef) and n.name == "SnakeEnv")
+        for node in ast.walk(tree):
+            if hasattr(node, "body") and isinstance(node.body, list):
+                node.body[:] = [s for s in node.body if not (
+                    isinstance(s, ast.Expr) and isinstance(s.value, ast.Constant)
+                    and isinstance(s.value.value, str))]
+        return ast.dump(tree)
+    member4_source = SNAKE_DIR / "member4" / "snake_ppo.py"
+    if environment_tree(member4_source) != environment_tree(SNAKE_DIR / "environment.py"):
+        raise ValueError("Member 4's embedded environment differs from the shared environment")
 
     print("Snake directory:", SNAKE_DIR)
     print("Environment loaded. No models have been trained or evaluated yet.")
@@ -100,12 +119,13 @@ def run_benchmark(*, project_dir=None, mode="smoke", output_root=None, show_plot
     TEST_SEEDS = list(range(TEST_SEED_BASE, TEST_SEED_BASE + N_EPISODES))
     ENV_CONFIG = dict(grid_size=8, end_score=8, max_steps=300,
                       reward_mode="sparse", teacher_mode="shortest_path")
-    METHOD_ORDER = ["Random", "Teacher", "AC", "BC + AC", "DQN", "Double DQN"]
+    METHOD_ORDER = ["Random", "Teacher", "AC", "BC + AC", "DQN", "Double DQN", "PPO"]
     METHOD_INFO = {
         "AC": {"budget_steps": 50000, "demo_episodes": 0},
         "BC + AC": {"budget_steps": 50000, "demo_episodes": 100},
         "DQN": {"budget_steps": 210000, "demo_episodes": 0},
         "Double DQN": {"budget_steps": 210000, "demo_episodes": 0},
+        "PPO": {"budget_steps": 500000, "demo_episodes": 0},
     }
 
     probe = SnakeEnv(**ENV_CONFIG)
@@ -142,6 +162,12 @@ def run_benchmark(*, project_dir=None, mode="smoke", output_root=None, show_plot
         raise ValueError("The shared environment differs from Member 2's environment. Check the differences before evaluation.")
 
     def checkpoint_ref(method, training_seed):
+        if method == "PPO":
+            path = (SNAKE_DIR / "member4/results/final" / f"seed-{training_seed}"
+                    / "clip-0.2/checkpoints/best.pt")
+            if not path.is_file():
+                raise FileNotFoundError(f"Missing PPO clip=0.2 checkpoint: {path}")
+            return {"file": path, "zip_member": None}
         if method in {"AC", "BC + AC"}:
             condition = "ac" if method == "AC" else "bc_ac"
             relative = Path("runs/member2/final") / f"seed-{training_seed}" / condition / "checkpoints/best.pt"
@@ -201,6 +227,15 @@ def run_benchmark(*, project_dir=None, mode="smoke", output_root=None, show_plot
             selected_steps = config.get("progress_rl_steps")
             demo_steps = config.get("progress_demo_steps")
             saved_budget = config.get("rl_steps")
+        elif method == "PPO":
+            if checkpoint.get("algorithm") != "ppo" or float(config.get("clip_ratio", -1)) != 0.2:
+                raise ValueError("PPO must use the delivered, preselected clip=0.2 condition")
+            network = PPOActorCritic(input_channels=7, action_count=3, grid_size=8,
+                                     learning_rate=3e-4, weight_decay=0.0)
+            network.load_state_dict(checkpoint["model_state_dict"], strict=True)
+            selected_steps = checkpoint.get("total_steps")
+            demo_steps = 0
+            saved_budget = config.get("steps")
         else:
             expected_algorithm = "dqn" if method == "DQN" else "double_dqn"
             if checkpoint.get("algorithm") != expected_algorithm or config.get("dueling", False):
@@ -227,7 +262,7 @@ def run_benchmark(*, project_dir=None, mode="smoke", output_root=None, show_plot
     def learned_action(network, method, observation):
         state = torch.as_tensor(observation, dtype=torch.float32, device=DEVICE).unsqueeze(0)
         output = network(state)
-        action_scores = output[0] if method in {"AC", "BC + AC"} else output
+        action_scores = output[0] if method in {"AC", "BC + AC", "PPO"} else output
         return int(action_scores.argmax(dim=-1).item())
 
     print("Inference-loading functions ready. No training has been performed.")
@@ -287,10 +322,10 @@ def run_benchmark(*, project_dir=None, mode="smoke", output_root=None, show_plot
 
     episodes_df = pd.DataFrame(episode_records)
     episodes_df["training_seed"] = pd.array(episodes_df["training_seed"], dtype="Int64")
-    assert len(episodes_df) == (2 + 4 * len(TRAINING_SEEDS)) * N_EPISODES
+    assert len(episodes_df) == (2 + len(METHOD_INFO) * len(TRAINING_SEEDS)) * N_EPISODES
     assert not episodes_df.duplicated(["method", "training_seed", "test_seed"]).any()
     assert episodes_df["score"].between(0, 7).all()
-    print("\nRecorded", len(episodes_df), "episodes. PPO has not been integrated yet.")
+    print("\nRecorded", len(episodes_df), "episodes, including PPO clip=0.2.")
     display(episodes_df.head(12))
 
     # 7. Average episodes within each trained model, then aggregate across training seeds
@@ -299,6 +334,8 @@ def run_benchmark(*, project_dir=None, mode="smoke", output_root=None, show_plot
         n_games=("score", "size"), score_mean=("score", "mean"),
         score_episode_sd=("score", "std"), reward_mean=("reward", "mean"),
         steps_mean=("steps", "mean"), success_rate=("success", "mean"),
+        timeout_rate=("outcome", lambda x: (x == "timeout").mean()),
+        collision_rate=("outcome", lambda x: (x == "collision").mean()),
     ).reset_index()
 
     summary_rows = []
@@ -313,6 +350,9 @@ def run_benchmark(*, project_dir=None, mode="smoke", output_root=None, show_plot
             "score_training_seed_sd": np.nan if baseline else model_rows["score_mean"].std(ddof=1),
             "baseline_episode_sd": model_rows["score_episode_sd"].iloc[0] if baseline else np.nan,
             "success_rate": model_rows["success_rate"].mean(),
+            "success_training_seed_sd": np.nan if baseline else model_rows["success_rate"].std(ddof=1),
+            "timeout_rate": model_rows["timeout_rate"].mean(),
+            "collision_rate": model_rows["collision_rate"].mean(),
             "reward_mean": model_rows["reward_mean"].mean(),
             "steps_mean": model_rows["steps_mean"].mean(),
             "budget_steps": METHOD_INFO.get(method, {}).get("budget_steps", 0),
@@ -323,7 +363,7 @@ def run_benchmark(*, project_dir=None, mode="smoke", output_root=None, show_plot
 
     fig, ax = plt.subplots(figsize=(9, 4))
     positions = np.arange(len(summary_df))
-    ax.bar(positions, summary_df["score_mean"], color=["#8e9aaf", "#2a9d8f", "#e9c46a", "#f4a261", "#457b9d", "#9b5de5"])
+    ax.bar(positions, summary_df["score_mean"], color=["#8e9aaf", "#2a9d8f", "#e9c46a", "#f4a261", "#457b9d", "#9b5de5", "#c65463"])
     has_sd = summary_df["score_training_seed_sd"].notna().to_numpy()
     if has_sd.any():
         ax.errorbar(positions[has_sd], summary_df.loc[has_sd, "score_mean"],
@@ -369,8 +409,10 @@ def run_benchmark(*, project_dir=None, mode="smoke", output_root=None, show_plot
         "evaluation_policy": "argmax for learned models; BFS for teacher; seeded random for random",
         "models_selected_by": "original validation protocol; never by this test",
         "interpretation": "existing trained checkpoints; training budgets differ across algorithm families",
+        "ppo_configuration": "clip=0.2, fixed before common evaluation; other clips remain in Member 4's sensitivity study",
+        "environment_compatibility": "Member 4 embedded SnakeEnv matches shared SnakeEnv AST ignoring docstrings",
         "source_sha256": {str(p.relative_to(SNAKE_DIR)): sha256_file(p)
-                           for p in [SNAKE_DIR / "environment.py", ac_source, SNAKE_DIR / "dqn.py"]},
+                           for p in [SNAKE_DIR / "environment.py", ac_source, SNAKE_DIR / "dqn.py", ppo_source, member4_source]},
         "checkpoints": checkpoint_metadata,
         "versions": {"python": sys.version, "torch": str(torch.__version__),
                      "numpy": np.__version__, "pandas": pd.__version__},
@@ -400,9 +442,10 @@ def run_benchmark(*, project_dir=None, mode="smoke", output_root=None, show_plot
         "", f"![Score comparison]({image_relative.as_posix()})", "",
         "For learned methods, average test episodes within each training seed before aggregating across training seeds. A single training seed cannot estimate cross-seed SD.",
         "Random and Teacher each receive one evaluation batch and have no independent training replicates; no training-seed error bars are assigned to them.", "",
-        "BC + AC uses additional teacher demonstrations relative to AC. DQN/DDQN and AC have different training budgets, so the overall table compares existing trained outcomes.",
+        "BC + AC uses additional demonstrations. AC/BC + AC, DQN/DDQN and PPO have full budgets of 50,000, 210,000 and 500,000 autonomous steps respectively. The overall table compares existing trained outcomes.",
+        "PPO uses clip=0.2 fixed before this common test. No model or clipping setting is selected using these scores.",
         "The current environment does not return separate wall/self-collision causes; this version records collision without guessing the subtype.", "",
-        "No training was performed. Learning curves, training-stage gameplay, PPO, fixed-state decision analysis and final conclusions remain to be integrated.", "",
+        "No training was performed. Additional analysis, learning curves and decision inspection are generated by member5_analysis.py.", "",
         "Contributions: the original group authors supplied the environment, algorithm implementations and saved weights. OpenAI Codex assisted with Member 5's evaluation code, documentation and execution checks.",
     ])
     (OUTPUT_DIR / "report.md").write_text("\n".join(report_lines) + "\n", encoding="utf-8")

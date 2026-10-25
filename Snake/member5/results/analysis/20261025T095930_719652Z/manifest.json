@@ -1,0 +1,31 @@
+{
+  "common_result_dir": "results/evaluation/20261025T094915_718765Z",
+  "common_protocol_sha256": "c4ae40681e3176eaf60800ce1a12fff8e710f15b2e8d2244c6103cfaff7fba67",
+  "analysis_script_sha256": "c09e7b647bab8367ee9bd2baa43f389a73e119c35f16d627ac230e820e6763e4",
+  "source_sha256": {
+    "runs/member2/final/all_validation.csv": "950ea0c0c3f0851d562c0d7c97e77275fdcaa2d389d94d979540dbded6c82ae9",
+    "member 3/results/final/seed-7/dqn/history.json": "6f33cc7ff4800ccf3cc72efc199105cab3adf7f068642a6bc3ef56b8dc668a41",
+    "member 3/results/final/seed-7/double-dqn/history.json": "5b25479e9ff9a2864b7b062efff093fff634149b067ee96c3f1ed7c89c82496d",
+    "member4/results/final/seed-7/clip-0.2/validation.json": "54cf9a2fd6fff058219bdd8c7dd66c15fa48cd04b9c7f66632906cd27b0c5f79",
+    "member 3/results/final/seed-42/dqn/history.json": "5bad24f6075993c72ee5f3ae1a8f288b21c9c8bc64d0b4f7f8588f4815c082fe",
+    "member 3/results/final/seed-42/double-dqn/history.json": "6b31f8a26a773e49b71800ea4a7374031bc002504d696bff7ecb97bfa5514b76",
+    "member4/results/final/seed-42/clip-0.2/validation.json": "8352e24d632bc8eb21035add43e91d4b211bed2b081d944ad4f2e2f41b3cbd77",
+    "member 3/results/final/seed-2026/dqn/history.json": "4b7eb4f3929c927da4d259cfe4641f0132869ea9bb93bea160f61af17cc39bb2",
+    "member 3/results/final/seed-2026/double-dqn/history.json": "a7a56c719c4266089a05ddbed01f928e0e5a2a7c69b0738ba048db463a14cfbc",
+    "member4/results/final/seed-2026/clip-0.2/validation.json": "c691be4f18a90495efd8fb32631c45b6d0700664b287d8e87e94a9195d5dbb06",
+    "member 3/results/final/seed-31415/dqn/history.json": "b7b34247d056fb48cf6c9d1548b13219140eb533b115e2cec4bbb20e05b9d63e",
+    "member 3/results/final/seed-31415/double-dqn/history.json": "303e226f6dc4821e37488cdba2eb511d420902b98986549488c97c7a6c0cd0bf",
+    "member4/results/final/seed-31415/clip-0.2/validation.json": "d35abaf998b67f1cefa828f1ef3a0472ba05acbf81eb438066f528976224b4a0",
+    "member 3/results/final/seed-27182/dqn/history.json": "b8e64b3070449e77f55355e02450de05fe0cb1348396cdba080e375e09f747e1",
+    "member 3/results/final/seed-27182/double-dqn/history.json": "0ab6893e7edde127594ced30176cd8374ad059e9e97f347dc81a00e7b10083e2",
+    "member4/results/final/seed-27182/clip-0.2/validation.json": "778ecd70630415e349249ccb925ab4d21e719951a49f30d587632e502ec701c5",
+    "runs/member2/final/figures/training_progress.gif": "d7f8c63aa9465e0348fd48209cc4284e17b0d14d3b8523f06007879552b7525f",
+    "runs/member2/final/figures/training_progress.png": "5a0769311e3f880244b6321c7b768899e2446123c1f65eeeeaaa7d6a570c07ea",
+    "runs/member2/final/figures/training_progress.json": "6a8b2d5e5873acc945e2740e0971bebc63c10a872e84bc887206337db5a55011",
+    "member4/results/final/results.csv": "340a9288fde91c78f4f2c7826f468fc1bce0d8364479be9a5c81b0575d49fbad"
+  },
+  "decision_result_dir": "results/decisions/20261025T095932_908221Z",
+  "trained_models_changed": false,
+  "training_performed": false,
+  "statistical_tests": "Two prespecified paired t-tests with Holm adjustment; descriptive seed bootstrap intervals"
+}

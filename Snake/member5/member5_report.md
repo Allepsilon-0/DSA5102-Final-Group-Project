@@ -1,92 +1,102 @@
-# Member 5: Unified Evaluation Methods and Interpretation
+# Member 5: Common evaluation and integrated analysis
 
-## 1. Research questions
+This report compares the group's delivered trained checkpoints under common game rules. It does not isolate algorithm quality under equal training resources.
 
-Evaluate the models already completed by the group under common game rules and test seeds. Use the same evaluation data for the overall comparison and two within-family comparisons: AC versus BC + AC, and DQN versus Double DQN.
+## Protocol
 
-This evaluation does not retrain models or modify the implementations supplied by Members 2 and 3. It uses their original validation-selected `best.pt` checkpoints and never selects checkpoints using the current test results.
+All methods use the shared 8 x 8 environment, target length 8 (maximum food score 7), 300-step limit, sparse reward mode and relative left/right/straight actions.
+Five training seeds (7, 42, 2026, 31415, 27182) and 200 common test seeds (1,200,000-1,200,199) produce 5,400 episodes, including 200 each for Random and Teacher. Learned policies use greedy argmax with no teacher takeover or safety mask.
+PPO clip=0.2 was fixed before this common test. Checkpoints were selected by their original validation protocols; these test outcomes never choose a checkpoint or clip.
 
-## 2. Compared configurations and existing training costs
+## Common final performance
 
-| Configuration | Source | Autonomous training budget | Additional demonstrations |
-|---|---|---:|---|
-| Random | Seeded uniform random actions | No training | None |
-| Teacher | Member 1's BFS rule-based policy | No training | The policy itself supplies rule-based actions |
-| AC | Member 2, without BC warm-up | 50,000 steps | None |
-| BC + AC | Member 2, with BC warm-up | 50,000 steps | 100 teacher episodes |
-| DQN | Member 3 | 210,000 steps | None |
-| Double DQN | Member 3 | 210,000 steps | None |
+| Method | Mean score | Seed SD | Success | Timeout | Training budget | Extra demonstrations |
+|---|---:|---:|---:|---:|---:|---:|
+| Random | 0.220 | N/A | 0.0% | 0.0% | 0 | 0 |
+| Teacher | 7.000 | N/A | 100.0% | 0.0% | 0 | 0 |
+| AC | 0.129 | 0.043 | 0.0% | 0.0% | 50,000 | 0 |
+| BC + AC | 1.714 | 0.292 | 0.8% | 40.3% | 50,000 | 100 |
+| DQN | 5.455 | 0.221 | 39.8% | 3.8% | 210,000 | 0 |
+| Double DQN | 5.683 | 0.132 | 47.3% | 2.5% | 210,000 | 0 |
+| PPO | 1.979 | 0.434 | 3.8% | 79.5% | 500,000 | 0 |
 
-PPO, owned by Member 4, has not yet been integrated. Teacher is a strong heuristic reference, not a theoretical upper bound.
+Double DQN has the highest observed learned-agent mean score (5.683) in this common evaluation. Teacher is a heuristic reference, not a mathematical upper bound.
+Teacher succeeds in 100.0% of episodes, compared with 47.3% for the highest-scoring learned configuration. The learned policies have not matched the heuristic's reliability on this test batch. AC's mean score (0.129) is below Random's (0.220); training does not automatically produce useful play.
+AC/BC + AC, DQN/DDQN and PPO have full autonomous training budgets of 50,000, 210,000 and 500,000 steps. BC + AC additionally uses 100 demonstration episodes. Training architectures, optimization and checkpoint-selection protocols also differ. Thus the table ranks delivered outcomes, not the intrinsic superiority of learning algorithms.
+For learned methods, scores are first averaged within each trained model, then across the five training seeds. Seed SD measures training-run variability. Baselines have no independent training replicates; their episode SD is available in the common summary but is not a training-seed SD.
 
-Training budgets differ across algorithm families. The overall comparison describes the delivered trained outcomes, rather than isolating algorithm quality under equal training resources. BC also uses additional demonstration data and optimization.
+![Common performance](figures/analysis/20261025T095930_719652Z/performance.png)
 
-A validation-selected checkpoint may precede the end of the full training run. `protocol.json` records both the full budget and the selected checkpoint's actual training progress.
+## Within-family improvement experiments
 
-## 3. Environment, actions and goal
+| Comparison | Mean score difference | Bootstrap 95% interval | Paired t p | Holm-adjusted p | Positive seeds |
+|---|---:|---|---:|---:|---:|
+| BC + AC minus AC | 1.585 | [1.325, 1.815] | 0.0004 | 0.0009 | 5/5 |
+| Double DQN minus DQN | 0.228 | [-0.023, 0.479] | 0.1961 | 0.1961 | 4/5 |
 
-| Setting | Fixed value |
-|---|---|
-| Board | 8 x 8 |
-| Initial snake length | 1 |
-| Success condition | Length 8, corresponding to 7 food items eaten |
-| Episode step limit | 300 |
-| Observation | 7 x 8 x 8: snake, food, wall and four direction channels |
-| Actions | 0 = left, 1 = right, 2 = straight |
-| Evaluation reward mode | Shared environment's `sparse` mode |
-| Teacher mode | `shortest_path`, using BFS |
+For BC + AC minus AC, the observed mean change is 1.585; the exploratory paired t-test remains below 0.05 after Holm adjustment.
 
-The current `sparse` mode still contains step costs and a loop penalty; it is not a purely event-only reward. The evaluation preserves the shared reward and termination rules.
+For Double DQN minus DQN, the observed mean change is 0.228; the exploratory paired t-test does not establish a difference at 0.05 after Holm adjustment.
 
-Each model receives an independent evaluation environment. Identical reset seeds provide reproducible random starts. Once policies take different actions, their subsequent trajectories and food-generation sequences need not remain identical.
+Paired t-tests assume approximately normal seed-level differences; five seeds cannot validate that assumption well. Bootstrap intervals are descriptive and are also limited by five training replicates. Treat these comparisons as small-sample exploratory evidence. Failure to detect a difference does not establish equivalence.
+BC + AC improves the mean food score but succeeds in only 0.8% of games. Demonstrations help relative to the weak AC delivery, while reliable task completion remains unresolved. Double DQN's success rate is 47.3% versus DQN's 39.8%; that success-rate difference is descriptive, not an additional significance claim.
+The BC comparison includes the additional demonstration cost and measures demonstration-assisted initialization at the same autonomous budget. The DQN comparison relies on Member 3's internal training controls. Neither comparison is selected or retuned after inspecting these results.
 
-## 4. Loading saved models
+![Seed-paired comparisons](figures/analysis/20261025T095930_719652Z/paired_comparisons.png)
 
-An AC checkpoint supplies `model_state_dict`; a DQN/DDQN checkpoint supplies `online_state_dict`. State dictionaries must match the network architecture strictly. Missing or incompatible weights raise an error rather than silently evaluating an untrained model.
+## Episode outcomes
 
-Member 2 checkpoints are read from an extracted directory or directly from `member2_assets.zip`. The latter route does not extract or overwrite the original files, and the archive's verified SHA-256 is checked. Member 3 checkpoints are located under `member 3/results/final/seed-*/.../checkpoints/best.pt`.
+PPO achieves success in 3.8% of games and times out in 79.5%. Long survival by itself is not task completion; a timeout alone does not prove circling.
+Collision is recorded without inventing separate wall/self-collision causes, because the common environment does not return that distinction.
 
-AC uses the action with the largest actor logit. DQN and DDQN use the action with the largest online-network Q-value; their difference lies in the training target. Learned-agent evaluation has no teacher takeover, collision mask, search or parameter update. Random actions are not filtered for safety.
+![Episode outcomes](figures/analysis/20261025T095930_719652Z/episode_outcomes.png)
 
-## 5. Smoke test and full evaluation
+## Historical learning curves
 
-| Mode | Training seeds | Episodes per model | Test seeds | Purpose |
-|---|---|---:|---|---|
-| `smoke` | 7 | 10 | 1,100,000-1,100,009 | Check loading, gameplay, recording and saving |
-| `evaluation` | 7, 42, 2026, 31415, 27182 | 200 | 1,200,000-1,200,199 | Common evaluation under a fixed protocol |
+The curves below reuse the original members' validation histories; all plotted points include five training seeds. Their validation seed sets and, for PPO, validation episode counts differ. The family panels have different x-axis ranges. Use these as learning-history context; use the common final evaluation for cross-family performance comparisons. The BC + AC zero-RL-step point is after BC warm-up; demonstrations are additional to the RL-step axis.
 
-The smoke test contains 60 episodes. The full mode contains four learned configurations x five trained models x 200 episodes, plus two baselines x 200 episodes, giving 4,400 episodes.
+The DQN-family validation scores rise substantially over their recorded training histories. AC remains weak, and BC + AC does not show monotonic gains after its demonstration warm-up. PPO improves after its weak early period but remains variable late in training. These descriptive patterns do not identify causal mechanisms or establish equal-budget convergence-speed differences.
 
-The full-evaluation seeds must not be used for checkpoint selection or tuning. If future changes are guided by test outcomes, reserve a new, unused test range.
+![Learning curves](figures/analysis/20261025T095930_719652Z/learning_curves.png)
 
-## 6. Metrics and aggregation
+## Original PPO clipping study
 
-- `score`: food items eaten, from 0 to 7; the primary metric.
-- `success`: whether the target length is reached.
-- `reward`: cumulative return under the common evaluation reward function; a supporting metric.
-- `steps`: episode action count; longer survival may reflect circling rather than useful progress.
-- `outcome`: success, timeout or collision. The environment does not return separate wall/self-collision causes, so this version does not infer them.
+This separate study uses Member 4's test seeds 2,950,000-2,950,199, not the common test batch. The three clipping groups each contain five models with 500,000 training interactions per model.
 
-First average evaluation episodes within each trained model. Then average those model means across training seeds and report their sample SD. Two hundred episodes from one model are not 200 independent training runs. A one-seed smoke test cannot estimate cross-training-seed variation; its SD is left as NaN rather than zero.
+| Clip | Original mean score | Seed SD | Original success |
+|---|---:|---:|---:|
+| 0.1 | 2.603 | 0.523 | 9.9% |
+| 0.2 | 2.085 | 0.432 | 4.8% |
+| 0.3 | 2.258 | 0.465 | 2.4% |
 
-Random and Teacher have no training replicates. Their episode-level SD and the learned methods' cross-training-seed SD are different quantities and are not presented as interchangeable error bars.
+Member 4 reports descriptive seed-paired intervals that include zero for both differences against clip=0.2. These original test results do not change the common evaluation's prespecified PPO setting.
 
-## 7. Paired improvement comparisons
+## Training-stage gameplay
 
-`paired_scores.csv` pairs models by training seed and computes BC + AC minus AC, and Double DQN minus DQN, in mean food score. The same test batch supports these comparisons and the overall summary.
+The following original Member 2 animation shows Initial, After BC, AC midpoint and Best validation on game seed 900000. It illustrates BC-assisted Actor-Critic, not PPO. In this game food score changes from 0 to 1; later stages still fail to complete the task. Do not describe it as reliable mastery or monotonically improving gameplay.
 
-The BC comparison measures the benefit of demonstration-assisted initialization under the same autonomous RL budget; it is not an equal-total-cost comparison. Interpreting the DQN/DDQN difference as an algorithmic improvement also depends on Member 3's internal training controls. The 10-episode, one-seed smoke test is not used for significance claims.
+![Member 2 training stages](figures/analysis/20261025T095930_719652Z/training_progress.gif)
 
-## 8. Current delivery status
+## Fixed-state decision inspection
 
-The original notebook's 60-episode smoke test was executed with real checkpoints, and all 20 available learned checkpoints passed loading checks. The program was then extracted into a Python module. The included smoke run was regenerated using the English version.
+The five learned methods use their seed-42 checkpoints on the same four hand-authored 8 x 8 states. These qualitative probes compare action choices and next-step collision risk; they do not establish a population performance ranking. Actor probabilities and Q values are on different scales.
 
-The package contains pipeline evidence, not a final ranking. Every execution saves its CSV files, protocol and run report under `results/<mode>/<timestamp>/`; the corresponding figure is under `figures/<mode>/<timestamp>/`. The run report references the figure using a relative link.
+[Detailed decision report](results/decisions/20261025T095932_908221Z/report.md)
 
-## 9. Remaining integration work
+![Fixed-state actions](figures/decisions/20261025T095932_908221Z/selected_actions.png)
 
-The full common evaluation, PPO integration, learning-curve consolidation, training-stage gameplay, fixed-state decision analysis, final conclusions, final group notebook and human video presentation remain to be completed. 
+Wall ahead: AC: left (clear on the next step); BC + AC: left (clear on the next step); DQN: left (clear on the next step); Double DQN: left (clear on the next step); PPO: left (clear on the next step).
 
-## 10. Contributions and AI usage
+Body beside head: AC: left (clear on the next step); BC + AC: right (immediate collision); DQN: right (immediate collision); Double DQN: right (immediate collision); PPO: right (immediate collision).
 
-The shared environment, algorithm implementations and previously trained weights come from the original group members. OpenAI Codex assisted with evaluation. Member 5 is responsible for understanding, verifying, integrating and presenting this work, with accurate disclosure in the final group report.
+A high average test score does not guarantee a sensible action on every synthetic state. The fixed probes expose local failures without retuning any model; they do not establish why those failures occur.
+
+## Conclusions and limitations
+
+Under the common evaluation protocol, Double DQN is the strongest delivered learned configuration by mean food score. Preserve the within-family comparisons and the training-cost disclosures when interpreting this observation.
+The task is a single small board with compressed observations that omit explicit head identity, body order, visit history and remaining time. Five training seeds and one test-seed batch limit precision and generalization. No claim is made that these findings transfer to other boards or establish equal-resource algorithm superiority.
+The group still needs to merge the members' full methods, this analysis and the actual contribution record into one runnable final notebook, then prepare the required human presentation. This Member 5 package is not the entire final submission.
+
+## Contributions and AI assistance
+
+Original group members supplied the environment, algorithms, trained weights, validation histories and gameplay animation. Member 5 integrates and evaluates those deliveries. OpenAI Codex assisted evaluation/analysis code, documentation, execution and verification. The students remain responsible for understanding and presenting their work.

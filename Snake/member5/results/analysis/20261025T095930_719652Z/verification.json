@@ -1,0 +1,15 @@
+{
+  "status": "passed",
+  "formal_episodes": 5400,
+  "learned_checkpoints_loaded": 25,
+  "ppo_adapter_equals_original_logits": true,
+  "old_smoke_results_preserved": true,
+  "next_step_collision_checks": 12,
+  "negative_checkpoint_checks": 3,
+  "notebook_cells_executed": 9,
+  "notebook_schema_valid": true,
+  "result_links_valid": true,
+  "source_and_checkpoint_hashes_valid": true,
+  "training_performed": false,
+  "other_members_sources_changed": false
+}

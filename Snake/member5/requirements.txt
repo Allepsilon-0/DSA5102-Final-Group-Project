@@ -4,3 +4,6 @@ pandas>=2.1
 matplotlib>=3.8
 gymnasium>=0.29
 pygame>=2.5
+scipy>=1.11
+ipython>=8
+nbformat>=5.9
