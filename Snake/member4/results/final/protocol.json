@@ -1,0 +1,45 @@
+{
+  "mode": "final",
+  "seeds": [
+    7,
+    42,
+    2026,
+    31415,
+    27182
+  ],
+  "clips": [
+    0.1,
+    0.2,
+    0.3
+  ],
+  "steps": 500000,
+  "eval_interval": 25000,
+  "validation_episodes": 50,
+  "test_episodes": 200,
+  "validation_base": 2601000,
+  "test_base": 2950000,
+  "rollout_steps": 1024,
+  "gamma": 0.99,
+  "gae_lambda": 0.95,
+  "grid_size": 8,
+  "end_score": 8,
+  "max_steps": 300,
+  "reward_mode": "sparse",
+  "reward_scale": 0.1,
+  "learning_rate": 0.0003,
+  "update_epochs": 6,
+  "batch_size": 256,
+  "value_coef": 0.5,
+  "entropy_coef": 0.02,
+  "max_grad_norm": 0.5,
+  "evaluation_policy": "greedy",
+  "timeout_semantics": "finite-horizon terminal",
+  "source_sha256": {
+    "snake_ppo.py": "f8e06dd50240f202559797559aac94aa223dfd681e056e5b58d638e3e1996174"
+  },
+  "entropy_final": 0.005,
+  "development_only": false,
+  "initialization": "orthogonal; policy head gain 0.01",
+  "target_kl": 0.03,
+  "learning_rate_schedule": "linear 1.0 to 0.1"
+}

@@ -1,0 +1,10 @@
+{
+  "python": "3.14.7",
+  "platform": "macOS-26.6.2-arm64-arm-64bit-Mach-O",
+  "torch": "2.14.1",
+  "numpy": "2.5.2",
+  "gymnasium": "1.4.0",
+  "pygame-ce": "2.5.8",
+  "matplotlib": "3.11.1",
+  "pillow": "12.3.0"
+}

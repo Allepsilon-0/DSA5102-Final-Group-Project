@@ -1,0 +1,170 @@
+[
+  {
+    "score": 0.02,
+    "steps": 6.0,
+    "reward": -4.8498,
+    "success": 0.0,
+    "timeout": 0.0,
+    "training_steps": 0
+  },
+  {
+    "score": 0.08,
+    "steps": 4.0,
+    "reward": -4.2292000000000005,
+    "success": 0.0,
+    "timeout": 0.0,
+    "training_steps": 25000
+  },
+  {
+    "score": 0.14,
+    "steps": 8.0,
+    "reward": -3.6686,
+    "success": 0.0,
+    "timeout": 0.0,
+    "training_steps": 50000
+  },
+  {
+    "score": 0.14,
+    "steps": 8.0,
+    "reward": -3.6686,
+    "success": 0.0,
+    "timeout": 0.0,
+    "training_steps": 75000
+  },
+  {
+    "score": 0.14,
+    "steps": 8.0,
+    "reward": -3.6686,
+    "success": 0.0,
+    "timeout": 0.0,
+    "training_steps": 100000
+  },
+  {
+    "score": 0.48,
+    "steps": 207.52,
+    "reward": -88.30720000000018,
+    "success": 0.0,
+    "timeout": 0.68,
+    "training_steps": 125000
+  },
+  {
+    "score": 0.78,
+    "steps": 87.74,
+    "reward": -5.902200000000017,
+    "success": 0.0,
+    "timeout": 0.26,
+    "training_steps": 150000
+  },
+  {
+    "score": 1.02,
+    "steps": 180.42,
+    "reward": -2.2498000000000604,
+    "success": 0.0,
+    "timeout": 0.58,
+    "training_steps": 175000
+  },
+  {
+    "score": 1.2,
+    "steps": 256.6,
+    "reward": 4.017599999999922,
+    "success": 0.0,
+    "timeout": 0.84,
+    "training_steps": 200000
+  },
+  {
+    "score": 0.96,
+    "steps": 149.84,
+    "reward": 5.496399999999925,
+    "success": 0.0,
+    "timeout": 0.48,
+    "training_steps": 225000
+  },
+  {
+    "score": 1.22,
+    "steps": 300.0,
+    "reward": 7.612199999999988,
+    "success": 0.0,
+    "timeout": 1.0,
+    "training_steps": 250000
+  },
+  {
+    "score": 1.42,
+    "steps": 288.48,
+    "reward": 4.909799999999948,
+    "success": 0.0,
+    "timeout": 0.96,
+    "training_steps": 275000
+  },
+  {
+    "score": 1.54,
+    "steps": 242.4,
+    "reward": 11.873399999999974,
+    "success": 0.0,
+    "timeout": 0.8,
+    "training_steps": 300000
+  },
+  {
+    "score": 0.88,
+    "steps": 224.5,
+    "reward": -6.653600000000064,
+    "success": 0.0,
+    "timeout": 0.74,
+    "training_steps": 325000
+  },
+  {
+    "score": 1.04,
+    "steps": 300.0,
+    "reward": -15.909600000000044,
+    "success": 0.0,
+    "timeout": 1.0,
+    "training_steps": 350000
+  },
+  {
+    "score": 1.1,
+    "steps": 253.7,
+    "reward": -7.114400000000029,
+    "success": 0.0,
+    "timeout": 0.84,
+    "training_steps": 375000
+  },
+  {
+    "score": 1.54,
+    "steps": 266.46,
+    "reward": 14.221799999999869,
+    "success": 0.02,
+    "timeout": 0.88,
+    "training_steps": 400000
+  },
+  {
+    "score": 1.92,
+    "steps": 295.92,
+    "reward": 7.839999999999895,
+    "success": 0.02,
+    "timeout": 0.98,
+    "training_steps": 425000
+  },
+  {
+    "score": 2.02,
+    "steps": 277.94,
+    "reward": 16.721599999999988,
+    "success": 0.0,
+    "timeout": 0.92,
+    "training_steps": 450000
+  },
+  {
+    "score": 1.86,
+    "steps": 266.36,
+    "reward": 11.385999999999985,
+    "success": 0.02,
+    "timeout": 0.88,
+    "training_steps": 475000
+  },
+  {
+    "score": 1.98,
+    "steps": 257.46,
+    "reward": 20.476399999999913,
+    "success": 0.04,
+    "timeout": 0.84,
+    "training_steps": 500000
+  }
+]
