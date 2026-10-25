@@ -3,7 +3,7 @@
 From Snake: python inspect_decisions.py --seed 42
 From Snake/member5 in Jupyter: %run ../inspect_decisions.py --seed 42
 This is a qualitative decision probe. It never trains or runs the benchmark.
-PPO integration is pending review of Member 4's delivered model and weights.
+PPO uses Member 4's delivered clip=0.2 weights, fixed before common evaluation.
 """
 
 from __future__ import annotations
@@ -35,7 +35,7 @@ GRID_SIZE = 8
 ENV_CONFIG = dict(grid_size=8, end_score=8, max_steps=300,
                   reward_mode="sparse", teacher_mode="shortest_path")
 TRAINING_SEEDS = (7, 42, 2026, 31415, 27182)
-METHODS = ("AC", "BC + AC", "DQN", "Double DQN")
+METHODS = ("AC", "BC + AC", "DQN", "Double DQN", "PPO")
 ACTION_NAMES = ("left", "right", "straight")
 ACTION_COLORS = ("#c45b38", "#167d76", "#3568a8")
 MEMBER2_ARCHIVE_SHA256 = "2bb0b353c4851142304685e77bb9000891b222ff181d40e78556d76b1921b6a9"
@@ -120,10 +120,10 @@ def locate_snake_folder(project_dir=None) -> Path:
     raise FileNotFoundError("Use the complete group repository, or pass --project-dir pointing to Snake.")
 
 
-def load_network(method: str, seed: int, snake_dir: Path, ac_class, q_class):
+def load_network(method: str, seed: int, snake_dir: Path, ac_class, q_class, ppo_class=None):
     """Read original best.pt weights; reject incompatible or missing deliveries."""
     if method not in METHODS:
-        raise ValueError(f"Unsupported method: {method}. PPO integration is pending.")
+        raise ValueError(f"Unsupported method: {method}")
     if method in ("AC", "BC + AC"):
         condition = "ac" if method == "AC" else "bc_ac"
         relative = Path("runs/member2/final") / f"seed-{seed}" / condition / "checkpoints/best.pt"
@@ -144,6 +144,10 @@ def load_network(method: str, seed: int, snake_dir: Path, ac_class, q_class):
                 except KeyError as exc:
                     raise FileNotFoundError(f"Missing {relative} in Member 2's archive") from exc
             reference = f"{archive_path.relative_to(snake_dir)}!{relative.as_posix()}"
+    elif method == "PPO":
+        path = snake_dir / "member4/results/final" / f"seed-{seed}" / "clip-0.2/checkpoints/best.pt"
+        payload = path.read_bytes()
+        reference = str(path.relative_to(snake_dir))
     else:
         condition = "dqn" if method == "DQN" else "double-dqn"
         path = snake_dir / "member 3/results/final" / f"seed-{seed}" / condition / "checkpoints/best.pt"
@@ -163,6 +167,16 @@ def load_network(method: str, seed: int, snake_dir: Path, ac_class, q_class):
         network.load_state_dict(checkpoint["model_state_dict"], strict=True)
         budget = config.get("rl_steps")
         selected_steps = config.get("progress_rl_steps")
+    elif method == "PPO":
+        if checkpoint.get("algorithm") != "ppo" or float(config.get("clip_ratio", -1)) != 0.2:
+            raise ValueError("PPO must use the fixed clip=0.2 condition")
+        if ppo_class is None:
+            ppo_class = load_source("decision_ppo", snake_dir / "ppo.py").PPOActorCritic
+        network = ppo_class(input_channels=7, action_count=3, grid_size=GRID_SIZE,
+                            learning_rate=3e-4, weight_decay=0.0)
+        network.load_state_dict(checkpoint["model_state_dict"], strict=True)
+        budget = config.get("steps")
+        selected_steps = checkpoint.get("total_steps")
     else:
         expected = "dqn" if method == "DQN" else "double_dqn"
         if checkpoint.get("algorithm") != expected or config.get("dueling", False):
@@ -185,7 +199,7 @@ def inspect_network(network, method: str, observations: list[np.ndarray]) -> lis
         for observation in observations:
             state = torch.as_tensor(observation, dtype=torch.float32).unsqueeze(0)
             output = network(state)
-            if method in ("AC", "BC + AC"):
+            if method in ("AC", "BC + AC", "PPO"):
                 logits, value = output
                 scores = torch.softmax(logits, dim=-1).squeeze(0).numpy()
                 row = {"score_type": "probability", "state_value": float(value.item())}
@@ -275,13 +289,15 @@ def run_inspection(*, seed=42, project_dir=None, output_root=None):
         raise ValueError(f"Select one delivered training seed: {TRAINING_SEEDS}")
     torch.set_num_threads(1)
     snake_dir = locate_snake_folder(project_dir)
-    source_paths = [snake_dir / "environment.py", snake_dir / "member2_snake/model.py", snake_dir / "dqn.py"]
+    source_paths = [snake_dir / "environment.py", snake_dir / "member2_snake/model.py", snake_dir / "dqn.py",
+                    snake_dir / "ppo.py", snake_dir / "member4/snake_ppo.py"]
     member2_env = snake_dir / "member2_snake/environment.py"
     if member2_env.is_file() and member2_env.read_bytes() != source_paths[0].read_bytes():
         raise ValueError("Member 2's environment differs from the shared environment; review before inspection.")
     env_class = load_source("decision_environment", source_paths[0]).SnakeEnv
     ac_class = load_source("decision_ac", source_paths[1]).ConvActorCritic
     q_class = load_source("decision_q", source_paths[2]).QNetwork
+    ppo_class = load_source("decision_ppo", source_paths[3]).PPOActorCritic
     scenarios = build_scenarios()
     observations, scenario_rows = [], []
     for scenario in scenarios:
@@ -301,7 +317,7 @@ def run_inspection(*, seed=42, project_dir=None, output_root=None):
             env.close()
     metadata, flat_rows = [], []
     for method in METHODS:
-        network, model_metadata = load_network(method, seed, snake_dir, ac_class, q_class)
+        network, model_metadata = load_network(method, seed, snake_dir, ac_class, q_class, ppo_class)
         metadata.append(model_metadata)
         for scenario_row, decision in zip(scenario_rows, inspect_network(network, method, observations), strict=True):
             action = decision["selected_action"]
@@ -316,7 +332,7 @@ def run_inspection(*, seed=42, project_dir=None, output_root=None):
         del network
     report = {
         "inspection_scope": dict(training_seed=seed, environment=ENV_CONFIG, scenario_count=len(scenarios),
-                                 model_count=len(METHODS), pending_methods=["PPO"], train_model=False,
+                                 model_count=len(METHODS), pending_methods=[], ppo_clip_ratio=0.2, train_model=False,
                                  full_benchmark_run=False, policy="argmax; no action masking or teacher override",
                                  limitation="Hand-authored states from one training seed are qualitative probes, not a performance or significance test. Immediate safety covers only the next step."),
         "models": metadata,
@@ -338,10 +354,10 @@ def run_inspection(*, seed=42, project_dir=None, output_root=None):
         writer.writerows(flat_rows)
     save_figures(scenarios, report, figure_dir)
     lines = ["# Fixed-state decision inspection", "",
-             f"Training seed: {seed}. Four existing methods, four fixed 8 x 8 states. PPO is pending.", "",
+             f"Training seed: {seed}. Five existing methods, four fixed 8 x 8 states. PPO uses clip=0.2.", "",
              "This is an inference-only qualitative probe. No training or full benchmark was run.", "",
-             "| State | Teacher reference | AC | BC + AC | DQN | Double DQN |",
-             "|---|---|---|---|---|---|"]
+             "| State | Teacher reference | AC | BC + AC | DQN | Double DQN | PPO |",
+             "|---|---|---|---|---|---|---|"]
     for row in scenario_rows:
         cells = [row["title"], row["teacher_action"]]
         for method in METHODS:
@@ -358,7 +374,7 @@ def run_inspection(*, seed=42, project_dir=None, output_root=None):
         lines.extend([f"![{name.replace('_', ' ')}]({relative})", ""])
     lines.extend(["The original members supplied the environment, algorithms and saved checkpoints. OpenAI Codex assisted with adapting this inspection script and checking its outputs.", ""])
     (result_dir / "report.md").write_text("\n".join(lines), encoding="utf-8")
-    print(f"Inspected {len(METHODS)} models on {len(scenarios)} fixed states; PPO pending.")
+    print(f"Inspected {len(METHODS)} models on {len(scenarios)} fixed states, including PPO clip=0.2.")
     print("Report:", result_dir / "report.md")
     print("Figures:", figure_dir)
     return dict(report=report, result_dir=result_dir, figure_dir=figure_dir)
