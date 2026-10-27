@@ -1,0 +1,19 @@
+{
+  "status": "passed",
+  "notebook": "DSA5102_Final_Project.ipynb",
+  "notebook_cells": 43,
+  "code_cells_executed": 20,
+  "execution_backend": "Sequential IPython in a fresh process",
+  "notebook_schema_valid": true,
+  "distinct_trained_models_loaded": 35,
+  "formal_common_episodes_loaded": 5400,
+  "fresh_inference_games": 7,
+  "training_performed": false,
+  "full_common_test_replayed": false,
+  "support_script_sha256": "c36505b5741a63fd2a6c9925e8613a26dec7fcefba76a31bbe09fffd76b53fb3",
+  "notebook_sha256": "b92fce7b58cf92c1760513951c25d72e0d276e77f805959b07a763bb4af85db1",
+  "portable_extracted_package_execution": "passed in a fresh process with no archive fallback",
+  "portable_trained_models_loaded": 35,
+  "single_notebook_in_submission_package": true,
+  "original_checkpoint_parameters_modified": false
+}
