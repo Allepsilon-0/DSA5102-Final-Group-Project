@@ -12,4 +12,4 @@ The complete submission ZIP contains exactly one notebook plus its dependencies,
 
 The team roster was retained from the original group notebook. Confirm the member-number-to-name association in the contributions section. The required human video presentation remains a separate deliverable.
 
-The old member notebooks can remain in the development repository. Use the consolidated notebook as the single report for the final submission. Family-specific tests retain their own original seeds; the common test compares delivered outcomes under different training budgets. AI assistance and the limitations are disclosed in the notebook.
+The old member notebooks can remain in the development repository. Use the consolidated notebook as the single report for the final submission. Family-specific tests retain their own original seeds; the common test compares delivered outcomes under different training budgets.
